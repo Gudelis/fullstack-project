@@ -4,6 +4,7 @@ const connectToDb = async () => {
   try {
     await mongoose.connect(
       "mongodb+srv://Benas:benas1@cluster0.kdhflr9.mongodb.net/examDB"
+      
     );
     console.log("Connected to monogDB");
   } catch (error) {
