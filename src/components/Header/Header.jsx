@@ -9,7 +9,7 @@ export const Header = () => {
 
   return (
     <>
-      <header className="flex justify-around my-10">
+      <header className="flex justify-center gap-x-20 my-10">
         {!!local ? (
           <>
             <button onClick={clearLocalStorage} className="text-right">

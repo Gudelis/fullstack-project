@@ -91,8 +91,7 @@ export const RegistrationForm = () => {
         type="submit"
         id="submitRegistration"
         value="Register"
-        className="mt-3 font-semibold"
-        style={{ cursor: "pointer" }}
+        className="mt-3 font-semibold cursor-pointer"
         onClick={handleSubmit}
       />
     </form>
