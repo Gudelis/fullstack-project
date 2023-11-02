@@ -51,9 +51,9 @@ export const LoginForm = () => {
       />
       <input
         type="submit"
-        className="mt-3 font-semibold"
+        className="mt-3 font-semibold cursor-pointer"
+        value="Login"
         onClick={handleSubmit}
-        style={{ cursor: "pointer" }}
       />
     </form>
   );
