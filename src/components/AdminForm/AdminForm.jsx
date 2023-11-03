@@ -1,20 +1,28 @@
 import { useState } from "react";
 import { baseURL } from "../../common/common";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export const AdminForm = () => {
   const [client, setClient] = useState("");
+  const [date, setDate] = useState(new Date());
+  console.log(client);
 
   const handleChange = (event) => {
     const getKey = event.target.id;
     const getData = event.target.value;
-
     setClient({ ...client, [getKey]: getData });
+  };
+
+  const handleChangeDate = (selectedDate) => {
+    setDate(selectedDate);
+    setClient({ ...client, date: selectedDate.toLocaleString("lt-LT") });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(baseURL, {
+      const response = await fetch(`${baseURL}/clients`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,6 +31,7 @@ export const AdminForm = () => {
       });
       if (response.ok) {
         alert("Success");
+        window.location.href = "/";
       } else {
         alert("Internal error");
       }
@@ -56,11 +65,26 @@ export const AdminForm = () => {
         required
         onChange={handleChange}
       />
-      <p>Calendar</p>
+
+      <DatePicker
+        selected={date}
+        onChange={handleChangeDate}
+        showTimeSelect
+        timeFormat="HH:mm"
+        timeIntervals={30}
+        value="Open calendar"
+        timeCaption="Hour"
+        minTime={new Date().setHours(8, 0, 0)}
+        maxTime={new Date().setHours(17, 0, 0)}
+        className="text-red-500 font-semibold w-full border p-1 mt-2 text-center"
+      />
+      <p className="text-center">
+        Selected date: {date.toLocaleString("lt-LT").slice(0, 16)}
+      </p>
       <input
         type="submit"
         value="Register new client"
-        className="cursor-pointer font-semibold"
+        className="cursor-pointer font-semibold mt-3 "
         onClick={handleSubmit}
       />
     </form>

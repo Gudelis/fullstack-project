@@ -13,10 +13,10 @@ const clientSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  //   date: {
-  //     type: String,
-  //     required: true,
-  //   },
+  date: {
+    type: Date,
+    required: true,
+  },
 });
 
 const Client = mongoose.model("client", clientSchema);

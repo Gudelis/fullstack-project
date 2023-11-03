@@ -7,7 +7,7 @@ export const HomePage = () => {
 
   useEffect(() => {
     const getClient = async () => {
-      const response = await fetch(baseURL, {
+      const response = await fetch(`${baseURL}/clients`, {
         METHOD: "GET",
         header: {
           "Content-Type": "application/json",
@@ -16,14 +16,25 @@ export const HomePage = () => {
       const data = await response.json();
       if (response.ok) {
         setAllClients(data);
-        console.log(data);
       }
     };
 
     getClient();
   }, []);
 
-  const deleteUser = () => {};
+  const deleteUser = async (client) => {
+    try {
+      await fetch(`${baseURL}/clients/${client._id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    window.location.href = "/";
+  };
 
   return (
     <>
@@ -41,17 +52,28 @@ export const HomePage = () => {
                     className="border p-1 mb-2 flex justify-between"
                     key={client._id}
                   >
-                    <div>
-                      {" "}
+                    <div className="ml-2">
                       <p>
                         {client.name} {client.surname}
                       </p>
                       <p>{client.email}</p>
+                      <p>
+                        <p>
+                          {new Date(client.date).toLocaleString("lt-LT", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "numeric",
+                                minute: "numeric",
+                                hour12: false,
+                              })}
+                        </p>
+                      </p>
                     </div>
                     <div>
                       <button
-                        className="h-full px-5 border bg-red-400"
-                        onClick={deleteUser}
+                        className="h-full px-10 border bg-red-400"
+                        onClick={() => deleteUser(client)}
                       >
                         Delete
                       </button>
