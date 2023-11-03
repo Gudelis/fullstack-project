@@ -42,7 +42,7 @@ export const RegistrationForm = () => {
 
   return (
     <form className="flex flex-col justify-center align-items-center w-3/12 m-auto">
-      <label htmlFor="email">E-Mail</label>
+      <label htmlFor="email">Email</label>
       <input
         type="text"
         id="email"
