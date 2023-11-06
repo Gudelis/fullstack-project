@@ -47,27 +47,23 @@ export const HomePage = () => {
             <p className="">All open appointments:</p>
             {!!allClients &&
               allClients.map((client) => (
-                <>
-                  <div
-                    className="border p-1 mb-2 flex justify-between"
-                    key={client._id}
-                  >
+                <div key={client._id}>
+                  <div className="border p-1 mb-2 flex justify-between">
                     <div className="ml-2">
                       <p>
-                        {client.name} {client.surname}
+                        {client.name} {client.surname}, email: {client.email}
                       </p>
-                      <p>{client.email}</p>
+                      {/* <p>Email: {client.email}</p> */}
                       <p>
-                        <p>
-                          {new Date(client.date).toLocaleString("lt-LT", {
-                                year: "numeric",
-                                month: "2-digit",
-                                day: "2-digit",
-                                hour: "numeric",
-                                minute: "numeric",
-                                hour12: false,
-                              })}
-                        </p>
+                        Visit at{" "}
+                        {new Date(client.date).toLocaleString("lt-LT", {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "numeric",
+                          minute: "numeric",
+                          hour12: false,
+                        })}
                       </p>
                     </div>
                     <div>
@@ -79,7 +75,7 @@ export const HomePage = () => {
                       </button>
                     </div>
                   </div>
-                </>
+                </div>
               ))}
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { baseURL } from "../../common/common";
+import { SubmitInput } from "../SubmitInput/SubmitInput";
 
 export const RegistrationForm = () => {
   const [passwordCheck, setPasswordCheck] = useState("");
@@ -86,14 +87,7 @@ export const RegistrationForm = () => {
         onChange={(event) => setPasswordCheck(event.target.value)}
         autoComplete="new-password"
       />
-
-      <input
-        type="submit"
-        id="submitRegistration"
-        value="Register"
-        className="mt-3 font-semibold cursor-pointer"
-        onClick={handleSubmit}
-      />
+      <SubmitInput submitValue="Register" onClick={handleSubmit} />
     </form>
   );
 };
