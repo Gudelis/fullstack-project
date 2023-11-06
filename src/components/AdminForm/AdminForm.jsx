@@ -4,38 +4,70 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 export const AdminForm = () => {
-  const [client, setClient] = useState("");
+  const [client, setClient] = useState({});
   const [date, setDate] = useState(new Date());
-  console.log(client);
+  const [appointmentDate, setappointmentDate] = useState(
+    "Select appointment date*"
+  );
+  const [clientValidation, setClientValidation] = useState({
+    name: true,
+    email: true,
+    date: true,
+  });
 
   const handleChange = (event) => {
     const getKey = event.target.id;
     const getData = event.target.value;
     setClient({ ...client, [getKey]: getData });
+    // validateClient(client);
   };
 
   const handleChangeDate = (selectedDate) => {
     setDate(selectedDate);
+    setappointmentDate(selectedDate);
     setClient({ ...client, date: selectedDate.toLocaleString("lt-LT") });
+    validateClient(client);
+  };
+
+  const validateClient = (client) => {
+    const validName = client.name && client.name.length >= 2;
+    const validEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(client.email);
+    const validDate = client.date && client.date.trim() !== "";
+
+    console.log(validName);
+
+    setClientValidation({
+      name: validName,
+      email: validEmail,
+      date: validDate,
+    });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      const response = await fetch(`${baseURL}/clients`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(client),
-      });
-      if (response.ok) {
-        alert("Success");
-        window.location.href = "/";
-      } else {
-        alert("Internal error");
+    validateClient(client);
+    if (
+      clientValidation.name &&
+      clientValidation.email &&
+      clientValidation.date
+    ) {
+      try {
+        const response = await fetch(`${baseURL}/clients`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(client),
+        });
+        if (response.ok) {
+          window.location.href = "/";
+        } else {
+          alert("Internal error");
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {}
+    }
   };
 
   return (
@@ -45,15 +77,17 @@ export const AdminForm = () => {
       <input
         type="text"
         id="name"
-        className="border p-1"
+        className={`border p-1 ${
+          !clientValidation.name && "border-red-500 focus:outline-red-500"
+        }`}
         required
         onChange={handleChange}
       />
-      <label htmlFor="email">Surname</label>
+      <label htmlFor="email">Surname (optional)</label>
       <input
         type="text"
         id="surname"
-        className="border p-1"
+        className={`border p-1`}
         required
         onChange={handleChange}
       />
@@ -61,7 +95,9 @@ export const AdminForm = () => {
       <input
         type="email"
         id="email"
-        className="border p-1"
+        className={`border p-1 ${
+          !clientValidation.email && "border-red-500 focus:outline-red-500"
+        }`}
         required
         onChange={handleChange}
       />
@@ -72,19 +108,23 @@ export const AdminForm = () => {
         showTimeSelect
         timeFormat="HH:mm"
         timeIntervals={30}
-        value="Open calendar"
+        value={
+          clientValidation.date
+            ? appointmentDate.toLocaleString("lt-LT")
+            : "Select a date"
+        }
         timeCaption="Hour"
         minTime={new Date().setHours(8, 0, 0)}
-        maxTime={new Date().setHours(17, 0, 0)}
-        className="text-red-500 font-semibold w-full border p-1 mt-2 text-center"
+        maxTime={new Date().setHours(16, 30, 0)}
+        className={` font-semibold w-full text-center border p-1 my-2 ${
+          !clientValidation.date &&
+          "border-red-500 focus:outline-red-500 text-red-500"
+        }`}
       />
-      <p className="text-center">
-        Selected date: {date.toLocaleString("lt-LT").slice(0, 16)}
-      </p>
       <input
         type="submit"
         value="Register new client"
-        className="cursor-pointer font-semibold mt-3 "
+        className="cursor-pointer font-semibold"
         onClick={handleSubmit}
       />
     </form>

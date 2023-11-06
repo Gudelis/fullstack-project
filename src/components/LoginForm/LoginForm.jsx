@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { baseURL } from "../../common/common";
+import { SubmitInput } from "../SubmitInput/SubmitInput";
 
 export const LoginForm = () => {
   const [login, setLogin] = useState({
@@ -49,12 +50,7 @@ export const LoginForm = () => {
         required
         onChange={handleChange}
       />
-      <input
-        type="submit"
-        className="mt-3 font-semibold cursor-pointer"
-        value="Login"
-        onClick={handleSubmit}
-      />
+      <SubmitInput submitValue="Login" onClick={handleSubmit} />
     </form>
   );
 };

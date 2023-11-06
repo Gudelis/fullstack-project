@@ -7,10 +7,11 @@ const clientSchema = mongoose.Schema({
   },
   surname: {
     type: String,
-    required: true,
+    required: false,
   },
   email: {
     type: String,
+    match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/,
     required: true,
   },
   date: {
