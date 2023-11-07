@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { local } from "../../common/common";
+import "./header.css";
 
 export const Header = () => {
   const clearLocalStorage = () => {
@@ -9,16 +10,14 @@ export const Header = () => {
 
   return (
     <>
-      <header className="flex justify-center gap-x-20 my-10">
-        {!!local ? (
+      <header className="flex justify-center gap-x-5 py-10">
+        {local ? (
           <>
-            <button onClick={clearLocalStorage} className="text-right">
-              Log Out
-            </button>
+            <button onClick={clearLocalStorage}>Log Out</button>
           </>
         ) : (
           <>
-            <NavLink to="/register">Register</NavLink>
+            <NavLink to="/register">Registration</NavLink>
             <NavLink to="/login">Login</NavLink>
           </>
         )}

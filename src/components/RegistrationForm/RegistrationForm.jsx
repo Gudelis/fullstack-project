@@ -1,54 +1,95 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { baseURL } from "../../common/common";
 import { SubmitInput } from "../SubmitInput/SubmitInput";
 
 export const RegistrationForm = () => {
-  const [passwordCheck, setPasswordCheck] = useState("");
-  const [registrationData, setRegistrationData] = useState({
+  const [passwordCheck, setPasswordCheck] = useState(null);
+  const [passwordState, setPasswordState] = useState(true);
+
+  const [admin, setAdmin] = useState({
     email: "",
     name: "",
     surname: "",
     password: "",
   });
+  const [adminValidation, setAdminValidation] = useState({
+    name: true,
+    surname: true,
+    password: true,
+    email: true,
+  });
 
   const handleChange = (event) => {
     const getKey = event.target.id;
     const getData = event.target.value;
+    setAdmin({ ...admin, [getKey]: getData });
+  };
 
-    setRegistrationData({ ...registrationData, [getKey]: getData });
+  const validateAdmin = (admin) => {
+    const validName = admin.name && admin.name.length >= 1;
+    const validSurname = admin.surname && admin.surname.length >= 1;
+    const validPassword =
+      passwordCheck === admin.password && admin.password.length > 0;
+    const validEmail =
+      /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(admin.email) &&
+      admin.email.length > 0;
+
+    if (!validPassword) {
+      setPasswordState(false);
+    } else {
+      setPasswordState(true);
+    }
+
+    setAdminValidation({
+      name: validName,
+      surname: validSurname,
+      password: validPassword,
+      email: validEmail,
+    });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (registrationData.password !== passwordCheck) {
-      alert("password doesnt match");
-    } else {
+
+    const isValid =
+      adminValidation.email &&
+      adminValidation.name &&
+      adminValidation.surname &&
+      adminValidation.password;
+
+    validateAdmin(admin);
+
+    if (isValid) {
       try {
         const response = await fetch(`${baseURL}/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(registrationData),
+          body: JSON.stringify(admin),
         });
         if (response.ok) {
           alert("Registration was succesful");
           window.location.href = "/login";
         } else {
-          alert("Internal error");
+          alert("Internal error, please try again later");
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
   return (
-    <form className="flex flex-col justify-center align-items-center w-3/12 m-auto">
+    <form className=" flex flex-col justify-center align-items-center w-3/12 m-auto">
       <label htmlFor="email">Email</label>
       <input
         type="text"
         id="email"
         required
-        className="border p-1"
+        className={`border p-1 ${
+          !adminValidation.email && "border-red-500 focus:outline-red-500"
+        }`}
         onChange={handleChange}
         autoComplete="new-email"
       />
@@ -57,7 +98,9 @@ export const RegistrationForm = () => {
         type="text"
         id="name"
         required
-        className="border p-1"
+        className={`border p-1 ${
+          !adminValidation.name && "border-red-500 focus:outline-red-500"
+        }`}
         onChange={handleChange}
       />
       <label htmlFor="surname">Surname</label>
@@ -65,7 +108,9 @@ export const RegistrationForm = () => {
         type="text"
         id="surname"
         required
-        className="border p-1"
+        className={`border p-1 ${
+          !adminValidation.surname && "border-red-500 focus:outline-red-500"
+        }`}
         onChange={handleChange}
       />
 
@@ -74,16 +119,20 @@ export const RegistrationForm = () => {
         type="password"
         id="password"
         required
-        className="border p-1"
+        className={`border p-1 ${
+          !passwordState && "border-red-500 focus:outline-red-500"
+        }`}
         onChange={handleChange}
         autoComplete="new-password"
       />
       <label htmlFor="email">Re-enter password</label>
       <input
         type="password"
-        id="paswordCheck"
+        id="passwordCheck"
         required
-        className="border p-1"
+        className={`border p-1 ${
+          !passwordState && "border-red-500 focus:outline-red-500"
+        }`}
         onChange={(event) => setPasswordCheck(event.target.value)}
         autoComplete="new-password"
       />
