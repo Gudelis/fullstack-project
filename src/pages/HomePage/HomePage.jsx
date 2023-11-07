@@ -45,7 +45,7 @@ export const HomePage = () => {
       ) : (
         <div className="flex justify-center">
           <AdminForm />
-          <div className="w-2/5 ml-5 client-page">
+          <div className="w-2/5 ml-5 client-page border">
             <p className=" p-4 text-lg">All open appointments:</p>
             {!!allClients &&
               allClients.map((client) => (
@@ -56,7 +56,7 @@ export const HomePage = () => {
                         {client.name} {client.surname}, email: {client.email}
                       </p>
                       <p className="pb-2">
-                        Visit at{" "}
+                        Date of visit:{" "}
                         {new Date(client.date).toLocaleString("lt-LT", {
                           year: "numeric",
                           month: "2-digit",

@@ -8,6 +8,8 @@ export const LoginForm = () => {
     password: "",
   });
 
+  const [checkLoginValid, setCheckLoginValid] = useState(true);
+
   const handleChange = (event) => {
     const getKey = event.target.id;
     const getData = event.target.value;
@@ -16,19 +18,29 @@ export const LoginForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const response = await fetch(`${baseURL}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(login),
-    });
 
-    const admin = await response.json();
+    try {
+      const response = await fetch(`${baseURL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(login),
+      });
 
-    if (response.ok) {
-      localStorage.setItem("userID", admin._id);
-      window.location.href = "/";
+      const admin = await response.json();
+
+      if (response.status === 200) {
+        console.log(200);
+        localStorage.setItem("userID", admin._id);
+        window.location.href = "/";
+      } else if (response.status === 401) {
+        setCheckLoginValid(false);
+        console.log(admin.error);
+        console.log(checkLoginValid);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -38,7 +50,9 @@ export const LoginForm = () => {
       <input
         type="email"
         id="email"
-        className="border p-1"
+        className={`border p-1 ${
+          !checkLoginValid && "border-red-500 focus:outline-red-500"
+        }`}
         required
         onChange={handleChange}
       />
@@ -46,10 +60,17 @@ export const LoginForm = () => {
       <input
         type="password"
         id="password"
-        className="border p-1"
+        className={`border p-1 ${
+          !checkLoginValid && "border-red-500 focus:outline-red-500"
+        }`}
         required
         onChange={handleChange}
       />
+      {!checkLoginValid && (
+        <p className="text-red-500 text-center mt-2">
+          Incorrect email or password
+        </p>
+      )}
       <SubmitInput submitValue="Login" onClick={handleSubmit} />
     </form>
   );
