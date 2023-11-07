@@ -39,22 +39,23 @@ export const HomePage = () => {
   return (
     <>
       {!local ? (
-        <p>To see available content, please login</p>
+        <p className="text-center">
+          To see available content, please register and login
+        </p>
       ) : (
         <div className="flex justify-center">
           <AdminForm />
-          <div className="w-7/12 ml-5">
-            <p className="">All open appointments:</p>
+          <div className="w-2/5 ml-5 client-page">
+            <p className=" p-4 text-lg">All open appointments:</p>
             {!!allClients &&
               allClients.map((client) => (
-                <div key={client._id}>
-                  <div className="border p-1 mb-2 flex justify-between">
-                    <div className="ml-2">
-                      <p>
+                <div key={client._id} className="mx-2">
+                  <div className="border mb-2 flex justify-between client-page">
+                    <div className="ml-3">
+                      <p className="pt-2">
                         {client.name} {client.surname}, email: {client.email}
                       </p>
-                      {/* <p>Email: {client.email}</p> */}
-                      <p>
+                      <p className="pb-2">
                         Visit at{" "}
                         {new Date(client.date).toLocaleString("lt-LT", {
                           year: "numeric",
@@ -66,9 +67,9 @@ export const HomePage = () => {
                         })}
                       </p>
                     </div>
-                    <div>
+                    <div className="flex justify-center items-center">
                       <button
-                        className="h-full px-10 border bg-red-400"
+                        className="h-3/4 mx-2 px-7 border bg-red-400 text-white"
                         onClick={() => deleteUser(client)}
                       >
                         Delete

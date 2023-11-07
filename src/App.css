@@ -6,4 +6,34 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Signika", sans-serif;
+}
+
+#root {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.8) 5%,
+    rgba(225, 130, 104, 0.897)
+  );
+}
+
+#root > div {
+  height: 100vh;
+  background-image: url("./assets/bg.png");
+  background-size: 100%;
+  background-position: top;
+  height: 100vh;
+}
+
+#root form {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 16px;
+}
+
+.client-page {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.client-page div {
+  background-color: white;
 }

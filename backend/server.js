@@ -14,5 +14,5 @@ server.use("/", adminController);
 server.use("/", clientController);
 
 server.listen(5000, () => {
-  console.log("Express server is running: 5000");
+  console.log("Express server is running on port 5000");
 });

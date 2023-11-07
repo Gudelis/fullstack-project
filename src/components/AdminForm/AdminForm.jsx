@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { baseURL } from "../../common/common";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -19,22 +19,19 @@ export const AdminForm = () => {
     const getKey = event.target.id;
     const getData = event.target.value;
     setClient({ ...client, [getKey]: getData });
-    // validateClient(client);
   };
 
   const handleChangeDate = (selectedDate) => {
     setDate(selectedDate);
     setappointmentDate(selectedDate);
-    setClient({ ...client, date: selectedDate.toLocaleString("lt-LT") });
     validateClient(client);
+    setClient({ ...client, date: selectedDate.toLocaleString("lt-LT") });
   };
 
   const validateClient = (client) => {
     const validName = client.name && client.name.length >= 2;
     const validEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(client.email);
     const validDate = client.date && client.date.trim() !== "";
-
-    console.log(validName);
 
     setClientValidation({
       name: validName,
@@ -71,8 +68,8 @@ export const AdminForm = () => {
   };
 
   return (
-    <form className="flex flex-col w-3/12 border p-1">
-      <p className="text-center">Make an appointment</p>
+    <form className="flex flex-col w-1/5 border">
+      <p className="text-lg mb-2">Create new appointment</p>
       <label htmlFor="email">Name</label>
       <input
         type="text"

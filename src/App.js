@@ -8,12 +8,14 @@ import { HomePage } from "./pages/HomePage/HomePage";
 function App() {
   return (
     <>
-      <Header />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/register" element={<RegistrationPage />} />
-        <Route path="/login" element={<LoginPage />} />
-      </Routes>
+      <div>
+        <Header />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/register" element={<RegistrationPage />} />
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      </div>
     </>
   );
 }
