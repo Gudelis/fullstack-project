@@ -1,5 +1,5 @@
 .submit {
-  width: 60%;
+  width: 50%;
   margin: auto;
   margin-top: 10px;
   font-weight: 600;
@@ -9,6 +9,6 @@
 }
 
 .submit:hover {
-  transition: 0.8s;
-  background-color: rgb(237, 143, 126);
+  transition: 0.5s;
+  background-color: rgb(236, 133, 135);
 }

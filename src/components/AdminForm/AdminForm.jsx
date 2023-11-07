@@ -40,14 +40,13 @@ export const AdminForm = () => {
     });
   };
 
+  const valid =
+    clientValidation.name && clientValidation.email && clientValidation.date;
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     validateClient(client);
-    if (
-      clientValidation.name &&
-      clientValidation.email &&
-      clientValidation.date
-    ) {
+    if (valid) {
       try {
         const response = await fetch(`${baseURL}/clients`, {
           method: "POST",
@@ -118,6 +117,11 @@ export const AdminForm = () => {
           "border-red-500 focus:outline-red-500 text-red-500"
         }`}
       />
+      {!valid && (
+        <p className="text-red-500 text-center mb-1">
+          Missing data for registration
+        </p>
+      )}
       <input
         type="submit"
         value="Register new client"

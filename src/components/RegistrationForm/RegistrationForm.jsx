@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { baseURL } from "../../common/common";
 import { SubmitInput } from "../SubmitInput/SubmitInput";
 
 export const RegistrationForm = () => {
   const [passwordCheck, setPasswordCheck] = useState(null);
   const [passwordState, setPasswordState] = useState(true);
+  const [emailIsTaken, setEmailIsTaken] = useState(false);
 
   const [admin, setAdmin] = useState({
     email: "",
@@ -48,14 +49,14 @@ export const RegistrationForm = () => {
     });
   };
 
+  const isValid =
+    adminValidation.email &&
+    adminValidation.name &&
+    adminValidation.surname &&
+    adminValidation.password;
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const isValid =
-      adminValidation.email &&
-      adminValidation.name &&
-      adminValidation.surname &&
-      adminValidation.password;
 
     validateAdmin(admin);
 
@@ -69,16 +70,24 @@ export const RegistrationForm = () => {
           body: JSON.stringify(admin),
         });
         if (response.ok) {
+          setEmailIsTaken(false);
           alert("Registration was succesful");
           window.location.href = "/login";
+        } else if (response.status === 400) {
+          setEmailIsTaken(true);
+          console.log(emailIsTaken);
         } else {
-          alert("Internal error, please try again later");
+          alert.log("Internal error, please try again later");
         }
       } catch (error) {
         console.log(error);
       }
     }
   };
+
+  console.log("emailIsTaken:", emailIsTaken);
+
+  console.log("adminValidation.email:", adminValidation.email);
 
   return (
     <form className=" flex flex-col justify-center align-items-center w-3/12 m-auto">
@@ -88,10 +97,9 @@ export const RegistrationForm = () => {
         id="email"
         required
         className={`border p-1 ${
-          !adminValidation.email && "border-red-500 focus:outline-red-500"
-        }`}
+          emailIsTaken && "border-red-500 focus:outline-red-500"
+        } ${!adminValidation.email && "border-red-500 focus:outline-red-500"}`}
         onChange={handleChange}
-        autoComplete="new-email"
       />
       <label htmlFor="name">Name</label>
       <input
@@ -136,6 +144,12 @@ export const RegistrationForm = () => {
         onChange={(event) => setPasswordCheck(event.target.value)}
         autoComplete="new-password"
       />
+      {!isValid && (
+        <p className="text-red-500 text-center mt-2">Incorrect credentials</p>
+      )}
+      {emailIsTaken && (
+        <p className="text-red-500 text-center mt-2">Email already taken</p>
+      )}
       <SubmitInput submitValue="Register" onClick={handleSubmit} />
     </form>
   );
