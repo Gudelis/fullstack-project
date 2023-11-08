@@ -3,7 +3,7 @@ import { baseURL } from "../../common/common";
 import { SubmitInput } from "../SubmitInput/SubmitInput";
 
 export const RegistrationForm = () => {
-  const [passwordCheck, setPasswordCheck] = useState(null);
+  const [passwordCheck, setPasswordCheck] = useState("");
   const [passwordState, setPasswordState] = useState(true);
   const [emailIsTaken, setEmailIsTaken] = useState(false);
 
@@ -30,16 +30,12 @@ export const RegistrationForm = () => {
     const validName = admin.name && admin.name.length >= 1;
     const validSurname = admin.surname && admin.surname.length >= 1;
     const validPassword =
-      passwordCheck === admin.password && admin.password.length > 0;
+      admin.password === passwordCheck && admin.password >= 1;
     const validEmail =
       /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(admin.email) &&
       admin.email.length > 0;
 
-    if (!validPassword) {
-      setPasswordState(false);
-    } else {
-      setPasswordState(true);
-    }
+    const isValid = validName && validSurname && validPassword && validEmail;
 
     setAdminValidation({
       name: validName,
@@ -47,20 +43,20 @@ export const RegistrationForm = () => {
       password: validPassword,
       email: validEmail,
     });
-  };
 
-  const isValid =
-    adminValidation.email &&
-    adminValidation.name &&
-    adminValidation.surname &&
-    adminValidation.password;
+    if (!validPassword) {
+      setPasswordState(false);
+    } else {
+      setPasswordState(true);
+    }
+    return isValid;
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const checkIfValid = validateAdmin(admin);
 
-    validateAdmin(admin);
-
-    if (isValid) {
+    if (checkIfValid) {
       try {
         const response = await fetch(`${baseURL}/register`, {
           method: "POST",
@@ -71,11 +67,10 @@ export const RegistrationForm = () => {
         });
         if (response.ok) {
           setEmailIsTaken(false);
-          alert("Registration was succesful");
+          alert("Registration was succesful, you can login now");
           window.location.href = "/login";
         } else if (response.status === 400) {
           setEmailIsTaken(true);
-          console.log(emailIsTaken);
         } else {
           alert.log("Internal error, please try again later");
         }
@@ -84,10 +79,6 @@ export const RegistrationForm = () => {
       }
     }
   };
-
-  console.log("emailIsTaken:", emailIsTaken);
-
-  console.log("adminValidation.email:", adminValidation.email);
 
   return (
     <form className=" flex flex-col justify-center align-items-center w-3/12 m-auto">
@@ -144,8 +135,10 @@ export const RegistrationForm = () => {
         onChange={(event) => setPasswordCheck(event.target.value)}
         autoComplete="new-password"
       />
-      {!isValid && (
-        <p className="text-red-500 text-center mt-2">Incorrect credentials</p>
+      {Object.values(adminValidation).some((value) => !value) && (
+        <p className="text-red-500 text-center mt-2">
+          Some credentials are incorrect or missing
+        </p>
       )}
       {emailIsTaken && (
         <p className="text-red-500 text-center mt-2">Email already taken</p>

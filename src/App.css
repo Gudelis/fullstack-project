@@ -26,14 +26,14 @@
 }
 
 #root form {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.6);
   padding: 16px;
 }
 
-.client-page {
-  background-color: rgba(255, 255, 255, 0.8);
+.window-bg {
+  background-color: rgba(255, 255, 255, 0.6);
 }
 
-.client-page div {
+/* .window-bg div {
   background-color: white;
-}
+} */

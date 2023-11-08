@@ -39,18 +39,20 @@ export const HomePage = () => {
   return (
     <>
       {!local ? (
-        <p className="text-center">
-          To see available content, please register and login
-        </p>
+        <div className="window-bg w-2/6 h-12 m-auto flex justify-center align-center">
+          <p className="text-center bg-white w-4/5 m-auto text-l">
+            Content is available only for administrators, please login
+          </p>
+        </div>
       ) : (
         <div className="flex justify-center">
           <AdminForm />
-          <div className="w-2/5 ml-5 client-page border">
+          <div className="w-2/5 ml-5 window-bg border">
             <p className=" p-4 text-lg">All open appointments:</p>
             {!!allClients &&
               allClients.map((client) => (
                 <div key={client._id} className="mx-2">
-                  <div className="border mb-2 flex justify-between client-page">
+                  <div className="border mb-2 flex justify-between bg-white">
                     <div className="ml-3">
                       <p className="pt-2">
                         {client.name} {client.surname}, email: {client.email}
