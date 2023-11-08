@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { baseURL } from "../../common/common";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -7,7 +7,7 @@ export const AdminForm = () => {
   const [client, setClient] = useState({});
   const [date, setDate] = useState(new Date());
   const [appointmentDate, setappointmentDate] = useState(
-    "Select appointment date*"
+    "Select appointment date"
   );
   const [clientValidation, setClientValidation] = useState({
     name: true,
@@ -18,14 +18,17 @@ export const AdminForm = () => {
   const handleChange = (event) => {
     const getKey = event.target.id;
     const getData = event.target.value;
-    setClient({ ...client, [getKey]: getData });
+    setClient({
+      ...client,
+      [getKey]: getData.charAt(0).toUpperCase() + getData.slice(1),
+    });
   };
 
   const handleChangeDate = (selectedDate) => {
     setDate(selectedDate);
     setappointmentDate(selectedDate);
-    validateClient(client);
     setClient({ ...client, date: selectedDate.toLocaleString("lt-LT") });
+    validateClient(client);
   };
 
   const validateClient = (client) => {
@@ -33,20 +36,22 @@ export const AdminForm = () => {
     const validEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(client.email);
     const validDate = client.date && client.date.trim() !== "";
 
+    const isValid = validName && validEmail && validDate;
+
     setClientValidation({
       name: validName,
       email: validEmail,
       date: validDate,
     });
-  };
 
-  const valid =
-    clientValidation.name && clientValidation.email && clientValidation.date;
+    return isValid;
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    validateClient(client);
-    if (valid) {
+    const checkIfValid = validateClient(client);
+
+    if (checkIfValid) {
       try {
         const response = await fetch(`${baseURL}/clients`, {
           method: "POST",
@@ -79,7 +84,9 @@ export const AdminForm = () => {
         required
         onChange={handleChange}
       />
-      <label htmlFor="email">Surname (optional)</label>
+      <label htmlFor="email">
+        Surname <span className="text-xs">(optional)</span>
+      </label>
       <input
         type="text"
         id="surname"
@@ -117,9 +124,9 @@ export const AdminForm = () => {
           "border-red-500 focus:outline-red-500 text-red-500"
         }`}
       />
-      {!valid && (
+      {Object.values(clientValidation).some((value) => !value) && (
         <p className="text-red-500 text-center mb-1">
-          Missing data for registration
+          Fill in all required information
         </p>
       )}
       <input
