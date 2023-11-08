@@ -1,5 +1,39 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Signika", sans-serif;
 }
+
+#root {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.8),
+    rgba(227, 120, 121, 1)
+  );
+}
+
+#root > div {
+  height: 100vh;
+  background-image: url("./assets/bg.png");
+  background-size: 100%;
+  background-position: top;
+  height: 100vh;
+}
+
+#root form {
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 16px;
+}
+
+.window-bg {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+/* .window-bg div {
+  background-color: white;
+} */
